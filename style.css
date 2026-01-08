@@ -1,0 +1,285 @@
+/* =====================
+   RESET BÁSICO
+===================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+body {
+  background: #f4f6fb;
+  color: #333;
+  padding: 24px;
+}
+
+/* =====================
+   LOGIN
+===================== */
+
+#container-login {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#loginForm {
+  display: flex;
+  flex-direction: column;
+  min-width: 350px;
+  gap: 14px;
+}
+
+#loginForm input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d0d4e4;
+  font-size: 14px;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+#loginForm input:focus {
+  outline: none;
+  border-color: #4f6ef7;
+  box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.15);
+}
+
+#loginForm button {
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #4f6ef7;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#loginForm button:hover {
+  background: #3f5ce0;
+}
+
+#loginForm button:active {
+  transform: scale(0.98);
+}
+
+/* =====================
+   ERRO LOGIN
+===================== */
+
+#erro {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 14px;
+  color: #e63946;
+}
+
+
+/* =====================
+   NAV
+===================== */
+nav {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+nav a {
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #e9ecf7;
+  color: #333;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+nav a:hover {
+  background: #4f6ef7;
+}
+
+#logout {
+  background: #fdd6d6;
+}
+
+#logout:hover {
+  background: #f74f4f;
+}
+
+/* =====================
+   TÍTULOS
+===================== */
+h1 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* =====================
+   FORMULÁRIO
+===================== */
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #4f6ef7;
+}
+
+/* =====================
+   BOTÕES
+===================== */
+button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #4f6ef7;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #3f5ce0;
+}
+
+/* =====================
+   LISTAS
+===================== */
+ul {
+  list-style: none;
+  margin-top: 16px;
+}
+
+li {
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+#listaAlunos li {
+  justify-content: space-between;
+}
+
+/* =====================
+   CHECKBOX PRESENÇA
+===================== */
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+/* =====================
+   EXPORTAÇÃO
+===================== */
+label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+/* =====================
+   MOBILE (até 600px)
+===================== */
+@media (max-width: 600px) {
+  body {
+    padding: 16px;
+  }
+
+  /* NAV */
+  nav {
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  nav a {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  /* TÍTULOS */
+  h1 {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  /* FORMULÁRIOS */
+  form {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select {
+    width: 100%;
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  /* LISTAS */
+  li {
+    padding: 14px;
+    font-size: 18px;
+  }
+
+  #listaAlunos li {
+    gap: 12px;
+  }
+
+  /* CHECKBOX MAIOR (touch) */
+  input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+  }
+
+  /* LABELS */
+  label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    font-size: 15px;
+  }
+
+  #label-export {
+    flex-direction: row;
+    flex: 1;
+  }
+}

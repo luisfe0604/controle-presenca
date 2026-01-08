@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Controle de Presença</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="index.html">Cadastro</a>
+      <a href="presenca.html">Presença</a>
+      <a id="logout">Sair</a>
+    </nav>
+
+    <h1>Controle de Presença</h1>
+
+    <label
+      >Data:
+      <input type="date" id="data" />
+    </label>
+
+    <ul id="listaPresenca"></ul>
+
+    Exportar por:
+    <label id="label-export">
+      <select id="tipoExport">
+        <option value="dia">Dia</option>
+        <option value="mes">Mês</option>
+        <option value="ano">Ano</option>
+      </select>
+      <button id="exportar">Exportar</button>
+    </label>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="supabase.js"></script>
+    <script src="presenca.js"></script>
+
+    <script>
+      supaBase.auth.getSession().then(({ data }) => {
+        if (!data.session) {
+          window.location.href = "login.html";
+        }
+      });
+    </script>
+
+    <script>
+      document
+        .getElementById("logout")
+        .addEventListener("click", async () => {
+          const confirmar = confirm("Deseja realmente sair?");
+          if (!confirmar) return;
+
+          const { error } = await supabaseClient.auth.signOut();
+
+          if (error) {
+            alert("Erro ao sair");
+            return;
+          }
+
+          window.location.href = "login.html";
+        });
+    </script>
+  </body>
+</html>
