@@ -37,13 +37,31 @@ async function carregarPresenca(dataSelecionada) {
     mapaPresenca[p.aluno_id] = p.presente;
   });
 
+  const presencasParaInserir = [];
+
+  alunos.forEach((aluno) => {
+    if (!(aluno.id in mapaPresenca)) {
+      presencasParaInserir.push({
+        aluno_id: aluno.id,
+        data: dataSelecionada,
+        presente: false,
+      });
+
+      mapaPresenca[aluno.id] = false;
+    }
+  });
+
+  if (presencasParaInserir.length > 0) {
+    await supaBase.from("presenca").insert(presencasParaInserir);
+  }
+
   lista.innerHTML = "";
 
   alunos.forEach((aluno) => {
     const li = document.createElement("li");
     const chk = document.createElement("input");
     chk.type = "checkbox";
-    chk.checked = mapaPresenca[aluno.id] || false;
+    chk.checked = mapaPresenca[aluno.id];
 
     async function salvarPresenca() {
       await supaBase.from("presenca").upsert(
@@ -136,9 +154,7 @@ function gerarExcel(registros, tipo, dataBase) {
 
   registros.forEach((r) => {
     const aluno = mapa[r.aluno_id];
-    const percentual = Math.round(
-      (aluno.presencas / aluno.total) * 100
-    );
+    const percentual = Math.round((aluno.presencas / aluno.total) * 100);
 
     linhas.push({
       Aluno: aluno.nome,
@@ -153,18 +169,11 @@ function gerarExcel(registros, tipo, dataBase) {
   const ws = XLSX.utils.json_to_sheet(linhas);
 
   ws["!cols"] = Object.keys(linhas[0]).map((key) => ({
-    wch: Math.max(
-      key.length,
-      ...linhas.map((l) => String(l[key]).length)
-    ) + 2
+    wch: Math.max(key.length, ...linhas.map((l) => String(l[key]).length)) + 2,
   }));
 
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Frequência");
 
-  XLSX.writeFile(
-    wb,
-    `frequencia_${tipo}_${dataBase}.xlsx`
-  );
+  XLSX.writeFile(wb, `frequencia_${tipo}_${dataBase}.xlsx`);
 }
-

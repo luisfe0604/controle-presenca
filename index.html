@@ -10,6 +10,7 @@
     <nav>
       <a href="index.html">Cadastro</a>
       <a href="presenca.html">Presença</a>
+      <a href="pagamentos.html">Pagamentos</a>
       <a id="logout">Sair</a>
     </nav>
 
@@ -23,21 +24,19 @@
     <ul id="listaAlunos"></ul>
 
     <script>
-      document
-        .getElementById("logout")
-        .addEventListener("click", async () => {
-          const confirmar = confirm("Deseja realmente sair?");
-          if (!confirmar) return;
+      document.getElementById("logout").addEventListener("click", async () => {
+        const confirmar = confirm("Deseja realmente sair?");
+        if (!confirmar) return;
 
-          const { error } = await supabaseClient.auth.signOut();
+        const { error } = await supabaseClient.auth.signOut();
 
-          if (error) {
-            alert("Erro ao sair");
-            return;
-          }
+        if (error) {
+          alert("Erro ao sair");
+          return;
+        }
 
-          window.location.href = "login.html";
-        });
+        window.location.href = "login.html";
+      });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
