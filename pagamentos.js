@@ -2,7 +2,7 @@ const lista = document.getElementById("listaPagamentos");
 const mesInput = document.getElementById("mesPagamento");
 const totalMensalEl = document.getElementById("totalMensal");
 
-const VALOR_MENSALIDADE = 35;
+const VALOR_MENSALIDADE = 50;
 
 mesInput.addEventListener("change", () => {
   carregarPagamentos(mesInput.value);
