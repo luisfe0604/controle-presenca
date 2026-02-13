@@ -4,7 +4,7 @@ const lista = document.getElementById("listaAlunos");
 async function carregarAlunos() {
   lista.innerHTML = "";
 
-  const { data: alunos, error } = await supaBase.from("alunos").select("*");
+  const { data: alunos, error } = await supaBase.from("alunos").select("*").order("nome", { ascending: true });
 
   if (error) {
     alert("Erro ao carregar alunos");

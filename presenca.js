@@ -15,7 +15,8 @@ async function carregarPresenca(dataSelecionada) {
 
   const { data: alunos, error: alunosError } = await supaBase
     .from("alunos")
-    .select("*");
+    .select("*")
+    .order("nome", { ascending: true });
 
   if (alunosError) {
     lista.innerHTML = "Erro ao carregar alunos";
