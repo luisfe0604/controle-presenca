@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -14,17 +14,19 @@
       <a id="logout">Sair</a>
     </nav>
 
-    <h1 style="display: flex; justify-content: space-between">
-      Pagamentos Mensais
-      <span id="totalMensal">R$ 0,00</span>
-    </h1>
-
     <form class="filtro">
       <label for="mesPagamento">Mês:</label>
       <input type="month" id="mesPagamento" />
     </form>
 
     <ul id="listaPagamentos"></ul>
+    
+    <div id="financeiro">
+      <p>Total Bruto: <span id="totalBruto">R$ 0,00</span></p>
+      <p>Total Quadra: <span id="totalQuadra">R$ 0,00</span></p>
+      <p>Sofia: <span id="totalQuadra">R$ 100,00</span></p>
+      <p>Total Líquido: <span id="totalLiquido">R$ 0,00</span></p>
+    </div>
 
     <label id="label-export">
       <button id="exportarPagamentos">Exportar Pagamentos</button>

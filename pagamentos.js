@@ -1,21 +1,31 @@
 const lista = document.getElementById("listaPagamentos");
 const mesInput = document.getElementById("mesPagamento");
-const totalMensalEl = document.getElementById("totalMensal");
 
 const VALOR_MENSALIDADE = 50;
+
+function obterValoresAluno(aluno) {
+  const meia = aluno.nome.includes("(30,00)");
+
+  if (meia) {
+    return {
+      bruto: 30,
+      quadra: 5,
+      liquido: 25,
+    };
+  }
+
+  return {
+    bruto: 60,
+    quadra: 10,
+    liquido: 50,
+  };
+}
 
 mesInput.addEventListener("change", () => {
   carregarPagamentos(mesInput.value);
 });
 
 carregarPagamentos(mesInput.value);
-
-function obterValorMensalidade(aluno) {
-  if (aluno.nome.includes("(30,00)")) {
-    return 25;
-  }
-  return VALOR_MENSALIDADE;
-}
 
 async function carregarPagamentos(mesSelecionado) {
   lista.innerHTML = "Carregando...";
@@ -115,21 +125,43 @@ async function carregarPagamentos(mesSelecionado) {
   atualizarTotal();
 
   function atualizarTotal() {
-    let total = 0;
+  let totalBruto = 0;
+  let totalQuadra = 0;
+  let totalLiquido = 0;
 
-    alunos.forEach((aluno, index) => {
-      const checkbox = lista.querySelectorAll('input[type="checkbox"]')[index];
+  alunos.forEach((aluno, index) => {
+    const checkbox = lista.querySelectorAll('input[type="checkbox"]')[index];
 
-      if (checkbox.checked) {
-        total += obterValorMensalidade(aluno);
-      }
-    });
+    if (checkbox.checked) {
+      const valores = obterValoresAluno(aluno);
 
-    totalMensalEl.textContent = total.toLocaleString("pt-BR", {
+      totalBruto += valores.bruto;
+      totalQuadra += valores.quadra;
+      totalLiquido += valores.liquido;
+    }
+  });
+
+  // desconta ajudante
+  totalLiquido -= 100;
+
+  document.getElementById("totalBruto").textContent =
+    totalBruto.toLocaleString("pt-BR", {
       style: "currency",
       currency: "BRL",
     });
-  }
+
+  document.getElementById("totalQuadra").textContent =
+    totalQuadra.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+
+  document.getElementById("totalLiquido").textContent =
+    totalLiquido.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+}
 
   const exportarBtn = document.getElementById("exportarPagamentos");
 
@@ -156,66 +188,90 @@ async function carregarPagamentos(mesSelecionado) {
     gerarExcelPagamentos(data, mes);
   });
 
-  function gerarExcelPagamentos(registros, mes) {
-    const mapa = {};
+function gerarExcelPagamentos(registros, mes) {
+  const mapa = {};
 
-    registros.forEach((r) => {
-      if (!mapa[r.aluno_id]) {
-        mapa[r.aluno_id] = {
-          nome: r.alunos.nome,
-          pago: r.pago,
-        };
-      }
-    });
-
-    const totalAlunos = Object.keys(mapa).length;
-    const pagantes = Object.values(mapa).filter((a) => a.pago).length;
-    let totalArrecadado = 0;
-
-    Object.values(mapa).forEach((aluno) => {
-      if (aluno.pago) {
-        if (aluno.nome.includes("(30,00)")) {
-          totalArrecadado += 25;
-        } else {
-          totalArrecadado += VALOR_MENSALIDADE;
-        }
-      }
-    });
-    const percentual = Math.round((pagantes / totalAlunos) * 100);
-
-    const linhas = Object.values(mapa).map((aluno) => {
-      const valorAluno = aluno.nome.includes("(30,00)")
-        ? 25
-        : VALOR_MENSALIDADE;
-
-      return {
-        Aluno: aluno.nome,
-        Pago: aluno.pago ? "Sim" : "Não",
-        "Valor Mensalidade": `R$ ${valorAluno.toFixed(2)}`,
+  registros.forEach((r) => {
+    if (!mapa[r.aluno_id]) {
+      mapa[r.aluno_id] = {
+        nome: r.alunos.nome,
+        pago: r.pago,
       };
-    });
+    }
+  });
 
-    linhas.push({});
-    linhas.push({
-      Aluno: "TOTAL",
-      Pago: `${pagantes} / ${totalAlunos}`,
-      "Valor Mensalidade": `R$ ${totalArrecadado.toFixed(2)}`,
-      Percentual: `${percentual}%`,
-    });
+  const alunosArray = Object.values(mapa);
+  const totalAlunos = alunosArray.length;
+  const pagantes = alunosArray.filter((a) => a.pago).length;
 
-    const ws = XLSX.utils.json_to_sheet(linhas);
+  let totalBruto = 0;
+  let totalQuadra = 0;
+  let totalLiquido = 0;
 
-    ws["!cols"] = Object.keys(linhas[0]).map((key) => ({
-      wch:
-        Math.max(
-          key.length,
-          ...linhas.map((l) => String(l[key] || "").length),
-        ) + 2,
-    }));
+  alunosArray.forEach((aluno) => {
+    if (aluno.pago) {
+      const valores = obterValoresAluno(aluno);
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Pagamentos");
+      totalBruto += valores.bruto;
+      totalQuadra += valores.quadra;
+      totalLiquido += valores.liquido;
+    }
+  });
 
-    XLSX.writeFile(wb, `pagamentos_${mes}.xlsx`);
-  }
+  const ajudante = 100;
+  const liquidoFinal = totalLiquido - ajudante;
+
+  const percentual = totalAlunos
+    ? Math.round((pagantes / totalAlunos) * 100)
+    : 0;
+
+  const linhas = alunosArray.map((aluno) => {
+    const valores = obterValoresAluno(aluno);
+
+    return {
+      Aluno: aluno.nome,
+      Pago: aluno.pago ? "Sim" : "Não",
+      "Bruto": aluno.pago ? valores.bruto : 0,
+      "Quadra": aluno.pago ? valores.quadra : 0,
+      "Liquido": aluno.pago ? valores.liquido : 0,
+    };
+  });
+
+  // Linha vazia
+  linhas.push({});
+
+  // Resumo financeiro
+  linhas.push({
+    Aluno: "RESUMO",
+    Pago: `${pagantes} / ${totalAlunos} (${percentual}%)`,
+    Bruto: totalBruto,
+    Quadra: totalQuadra,
+    Liquido: totalLiquido,
+  });
+
+  linhas.push({
+    Aluno: "SOFIA",
+    Liquido: -ajudante,
+  });
+
+  linhas.push({
+    Aluno: "LÍQUIDO FINAL",
+    Liquido: liquidoFinal,
+  });
+
+  const ws = XLSX.utils.json_to_sheet(linhas);
+
+  ws["!cols"] = Object.keys(linhas[0]).map((key) => ({
+    wch:
+      Math.max(
+        key.length,
+        ...linhas.map((l) => String(l[key] || "").length)
+      ) + 2,
+  }));
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Pagamentos");
+
+  XLSX.writeFile(wb, `pagamentos_${mes}.xlsx`);
+}
 }

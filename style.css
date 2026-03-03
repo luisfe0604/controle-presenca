@@ -210,6 +210,16 @@ label {
    PAGAMENTOS
 ===================== */
 
+#financeiro {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+#financeiro p {
+  display: flex;
+  justify-content: space-between;
+}
+
 li.pago {
   background: #e9fbe9;
   border-left: 5px solid #2ecc71;
