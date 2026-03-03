@@ -10,6 +10,13 @@ mesInput.addEventListener("change", () => {
 
 carregarPagamentos(mesInput.value);
 
+function obterValorMensalidade(aluno) {
+  if (aluno.nome.includes("(30,00)")) {
+    return 25;
+  }
+  return VALOR_MENSALIDADE;
+}
+
 async function carregarPagamentos(mesSelecionado) {
   lista.innerHTML = "Carregando...";
 
@@ -83,7 +90,7 @@ async function carregarPagamentos(mesSelecionado) {
         },
         {
           onConflict: ["aluno_id", "mes"],
-        }
+        },
       );
 
       status.textContent = chk.checked ? "Pago" : "Pendente";
@@ -108,11 +115,15 @@ async function carregarPagamentos(mesSelecionado) {
   atualizarTotal();
 
   function atualizarTotal() {
-    const pagos = lista.querySelectorAll(
-      'input[type="checkbox"]:checked'
-    ).length;
+    let total = 0;
 
-    const total = pagos * VALOR_MENSALIDADE;
+    alunos.forEach((aluno, index) => {
+      const checkbox = lista.querySelectorAll('input[type="checkbox"]')[index];
+
+      if (checkbox.checked) {
+        total += obterValorMensalidade(aluno);
+      }
+    });
 
     totalMensalEl.textContent = total.toLocaleString("pt-BR", {
       style: "currency",
@@ -133,7 +144,7 @@ async function carregarPagamentos(mesSelecionado) {
       pago,
       aluno_id,
       alunos!pagamentos_aluno_id_fkey(nome)
-    `
+    `,
       )
       .eq("mes", mes);
 
@@ -159,14 +170,30 @@ async function carregarPagamentos(mesSelecionado) {
 
     const totalAlunos = Object.keys(mapa).length;
     const pagantes = Object.values(mapa).filter((a) => a.pago).length;
-    const totalArrecadado = pagantes * VALOR_MENSALIDADE;
+    let totalArrecadado = 0;
+
+    Object.values(mapa).forEach((aluno) => {
+      if (aluno.pago) {
+        if (aluno.nome.includes("(30,00)")) {
+          totalArrecadado += 25;
+        } else {
+          totalArrecadado += VALOR_MENSALIDADE;
+        }
+      }
+    });
     const percentual = Math.round((pagantes / totalAlunos) * 100);
 
-    const linhas = Object.values(mapa).map((aluno) => ({
-      Aluno: aluno.nome,
-      Pago: aluno.pago ? "Sim" : "Não",
-      "Valor Mensalidade": `R$ ${VALOR_MENSALIDADE.toFixed(2)}`,
-    }));
+    const linhas = Object.values(mapa).map((aluno) => {
+      const valorAluno = aluno.nome.includes("(30,00)")
+        ? 25
+        : VALOR_MENSALIDADE;
+
+      return {
+        Aluno: aluno.nome,
+        Pago: aluno.pago ? "Sim" : "Não",
+        "Valor Mensalidade": `R$ ${valorAluno.toFixed(2)}`,
+      };
+    });
 
     linhas.push({});
     linhas.push({
@@ -182,7 +209,7 @@ async function carregarPagamentos(mesSelecionado) {
       wch:
         Math.max(
           key.length,
-          ...linhas.map((l) => String(l[key] || "").length)
+          ...linhas.map((l) => String(l[key] || "").length),
         ) + 2,
     }));
 
