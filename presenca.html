@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -16,12 +16,16 @@
 
     <h1>Controle de Presença</h1>
 
-    <label
-      >Data:
+    <label>
+      Data:
       <input type="date" id="data" />
     </label>
 
     <ul id="listaPresenca"></ul>
+
+    <div id="resumoPresenca">
+      <p>Presentes: <span id="totalPresentes">0</span></p>
+    </div>
 
     Exportar por:
     <label id="label-export">

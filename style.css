@@ -252,6 +252,20 @@ li.nao {
 }
 
 /* =====================
+   PRESENCA
+===================== */
+
+#resumoPresenca {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+#resumoPresenca p {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* =====================
    MOBILE (até 600px)
 ===================== */
 @media (max-width: 600px) {

@@ -58,39 +58,48 @@ async function carregarPresenca(dataSelecionada) {
 
   lista.innerHTML = "";
 
-  alunos.forEach((aluno) => {
-    const li = document.createElement("li");
-    const chk = document.createElement("input");
-    chk.type = "checkbox";
-    chk.checked = mapaPresenca[aluno.id];
+alunos.forEach((aluno) => {
+  const li = document.createElement("li");
+  const chk = document.createElement("input");
 
-    async function salvarPresenca() {
-      await supaBase.from("presenca").upsert(
-        {
-          aluno_id: aluno.id,
-          data: dataSelecionada,
-          presente: chk.checked,
-        },
-        {
-          onConflict: ["aluno_id", "data"],
-        }
-      );
-    }
+  chk.type = "checkbox";
+  chk.checked = mapaPresenca[aluno.id];
 
-    chk.addEventListener("click", (e) => {
-      e.stopPropagation();
-    });
+  async function salvarPresenca() {
+    await supaBase.from("presenca").upsert(
+      {
+        aluno_id: aluno.id,
+        data: dataSelecionada,
+        presente: chk.checked,
+      },
+      {
+        onConflict: ["aluno_id", "data"],
+      }
+    );
+    li.classList.toggle("pago", chk.checked);
+  }
 
-    chk.addEventListener("change", salvarPresenca);
-
-    li.addEventListener("click", async () => {
-      chk.checked = !chk.checked;
-      await salvarPresenca();
-    });
-
-    li.append(chk, " ", aluno.nome);
-    lista.appendChild(li);
+  chk.addEventListener("click", (e) => {
+    e.stopPropagation();
   });
+
+  chk.addEventListener("change", async () => {
+    await salvarPresenca();
+    atualizarContador();
+  });
+
+  li.addEventListener("click", async () => {
+    chk.checked = !chk.checked;
+    await salvarPresenca();
+    atualizarContador();
+  });
+  
+  li.append(chk, " ", aluno.nome);
+
+  lista.appendChild(li);
+});
+
+atualizarContador();
 }
 
 exportarBtn.addEventListener("click", async () => {
@@ -177,4 +186,18 @@ function gerarExcel(registros, tipo, dataBase) {
   XLSX.utils.book_append_sheet(wb, ws, "Frequência");
 
   XLSX.writeFile(wb, `frequencia_${tipo}_${dataBase}.xlsx`);
+}
+
+function atualizarContador() {
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+  let total = 0;
+
+  checkboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      total++;
+    }
+  });
+
+  document.getElementById("totalPresentes").innerText = total;
 }
