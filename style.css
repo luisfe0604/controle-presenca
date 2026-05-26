@@ -266,6 +266,24 @@ li.nao {
 }
 
 /* =====================
+   ALUNOS INATIVOS
+===================== */
+
+.inativo {
+  opacity: 0.55;
+  filter: grayscale(100%);
+  background: #f1f1f1 !important;
+}
+
+.inativo input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
+.inativo .status {
+  opacity: 0.7;
+}
+
+/* =====================
    MOBILE (até 600px)
 ===================== */
 @media (max-width: 600px) {

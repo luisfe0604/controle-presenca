@@ -18,16 +18,16 @@ filtroTurma.addEventListener("change", () => {
 async function carregarPresenca(dataSelecionada) {
   lista.innerHTML = "Carregando...";
 
-let queryAlunos = supaBase
-  .from("alunos")
-  .select("*")
-  .order("nome", { ascending: true });
+  let queryAlunos = supaBase
+    .from("alunos")
+    .select("*")
+    .order("nome", { ascending: true });
 
-if (filtroTurma.value !== "TODAS") {
-  queryAlunos = queryAlunos.eq("turma", filtroTurma.value);
-}
+  if (filtroTurma.value !== "TODAS") {
+    queryAlunos = queryAlunos.eq("turma", filtroTurma.value);
+  }
 
-const { data: alunos, error: alunosError } = await queryAlunos;
+  const { data: alunos, error: alunosError } = await queryAlunos;
 
   if (alunosError) {
     lista.innerHTML = "Erro ao carregar alunos";
@@ -69,48 +69,61 @@ const { data: alunos, error: alunosError } = await queryAlunos;
 
   lista.innerHTML = "";
 
-alunos.forEach((aluno) => {
-  const li = document.createElement("li");
-  const chk = document.createElement("input");
+  alunos.forEach((aluno) => {
+    const li = document.createElement("li");
+    const chk = document.createElement("input");
 
-  chk.type = "checkbox";
-  chk.checked = mapaPresenca[aluno.id];
+    if (aluno.inativo) {
+      li.classList.add("inativo");
+    }
 
-  async function salvarPresenca() {
-    await supaBase.from("presenca").upsert(
-      {
-        aluno_id: aluno.id,
-        data: dataSelecionada,
-        presente: chk.checked,
-      },
-      {
-        onConflict: ["aluno_id", "data"],
-      }
-    );
-    li.classList.toggle("pago", chk.checked);
-  }
+    chk.type = "checkbox";
+    chk.checked = mapaPresenca[aluno.id];
 
-  chk.addEventListener("click", (e) => {
-    e.stopPropagation();
+    if (aluno.inativo) {
+      chk.disabled = true;
+    }
+
+    async function salvarPresenca() {
+      if (aluno.inativo) return;
+      await supaBase.from("presenca").upsert(
+        {
+          aluno_id: aluno.id,
+          data: dataSelecionada,
+          presente: chk.checked,
+        },
+        {
+          onConflict: ["aluno_id", "data"],
+        },
+      );
+      li.classList.toggle("pago", chk.checked);
+    }
+
+    chk.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+
+    chk.addEventListener("change", async () => {
+      await salvarPresenca();
+      atualizarContador();
+    });
+
+    li.addEventListener("click", async () => {
+      if (aluno.inativo) return;
+
+      chk.checked = !chk.checked;
+      await salvarPresenca();
+      atualizarContador();
+    });
+
+    const nomeExibicao = aluno.inativo ? `${aluno.nome} (INATIVO)` : aluno.nome;
+
+    li.append(chk, " ", nomeExibicao);
+
+    lista.appendChild(li);
   });
 
-  chk.addEventListener("change", async () => {
-    await salvarPresenca();
-    atualizarContador();
-  });
-
-  li.addEventListener("click", async () => {
-    chk.checked = !chk.checked;
-    await salvarPresenca();
-    atualizarContador();
-  });
-  
-  li.append(chk, " ", aluno.nome);
-
-  lista.appendChild(li);
-});
-
-atualizarContador();
+  atualizarContador();
 }
 
 exportarBtn.addEventListener("click", async () => {
