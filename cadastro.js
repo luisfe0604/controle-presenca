@@ -4,7 +4,10 @@ const lista = document.getElementById("listaAlunos");
 async function carregarAlunos() {
   lista.innerHTML = "";
 
-  const { data: alunos, error } = await supaBase.from("alunos").select("*").order("nome", { ascending: true });
+  const { data: alunos, error } = await supaBase
+    .from("alunos")
+    .select("*")
+    .order("nome", { ascending: true });
 
   if (error) {
     alert("Erro ao carregar alunos");
@@ -15,7 +18,7 @@ async function carregarAlunos() {
     const li = document.createElement("li");
 
     const nome = document.createElement("span");
-    nome.textContent = aluno.nome;
+    nome.textContent = `${aluno.nome} - Turma ${aluno.turma}`;
 
     const btnDelete = document.createElement("span");
     btnDelete.textContent = "🗑️";
@@ -23,7 +26,7 @@ async function carregarAlunos() {
 
     btnDelete.onclick = async () => {
       const confirmar = confirm(
-        `Excluir o aluno "${aluno.nome}"?\n\n⚠️ Isso também apagará a presença dele.`
+        `Excluir o aluno "${aluno.nome}"?\n\n⚠️ Isso também apagará a presença dele.`,
       );
 
       if (!confirmar) return;
@@ -50,8 +53,12 @@ async function excluirAluno(alunoId) {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const nome = document.getElementById("nome").value;
+  const turma = document.getElementById("turma").value;
 
-  await supaBase.from("alunos").insert({ nome });
+  await supaBase.from("alunos").insert({
+    nome,
+    turma,
+  });
   form.reset();
   carregarAlunos();
 });

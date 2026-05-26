@@ -2,6 +2,7 @@ const exportarBtn = document.getElementById("exportar");
 const tipoSelect = document.getElementById("tipoExport");
 const lista = document.getElementById("listaPresenca");
 const dataInput = document.getElementById("data");
+const filtroTurma = document.getElementById("filtroTurma");
 
 dataInput.valueAsDate = new Date();
 carregarPresenca(dataInput.value);
@@ -10,13 +11,23 @@ dataInput.addEventListener("change", () => {
   carregarPresenca(dataInput.value);
 });
 
+filtroTurma.addEventListener("change", () => {
+  carregarPresenca(dataInput.value);
+});
+
 async function carregarPresenca(dataSelecionada) {
   lista.innerHTML = "Carregando...";
 
-  const { data: alunos, error: alunosError } = await supaBase
-    .from("alunos")
-    .select("*")
-    .order("nome", { ascending: true });
+let queryAlunos = supaBase
+  .from("alunos")
+  .select("*")
+  .order("nome", { ascending: true });
+
+if (filtroTurma.value !== "TODAS") {
+  queryAlunos = queryAlunos.eq("turma", filtroTurma.value);
+}
+
+const { data: alunos, error: alunosError } = await queryAlunos;
 
   if (alunosError) {
     lista.innerHTML = "Erro ao carregar alunos";
