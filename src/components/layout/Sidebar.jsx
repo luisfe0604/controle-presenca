@@ -5,16 +5,12 @@ import { supabase } from "../../services/supabase";
 import "./layout.css";
 
 export default function Sidebar({ open, onClose }) {
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   async function handleLogout() {
     await supabase.auth.signOut();
 
     navigate("/login");
-  }
-  function fecharSidebar() {
-    setOpen(false);
   }
 
   return (
@@ -25,13 +21,13 @@ export default function Sidebar({ open, onClose }) {
         <div className="sidebar-header">🏐 Vôlei</div>
 
         <nav>
-          <NavLink to="/" onClick={fecharSidebar}>Dashboard</NavLink>
+          <NavLink to="/" onClick={onClose}>Dashboard</NavLink>
 
-          <NavLink to="/alunos" onClick={fecharSidebar}>Alunos</NavLink>
+          <NavLink to="/alunos" onClick={onClose}>Alunos</NavLink>
 
-          <NavLink to="/presencas" onClick={fecharSidebar}>Presenças</NavLink>
+          <NavLink to="/presencas" onClick={onClose}>Presenças</NavLink>
 
-          <NavLink to="/pagamentos" onClick={fecharSidebar}>Pagamentos</NavLink>
+          <NavLink to="/pagamentos" onClick={onClose}>Pagamentos</NavLink>
         </nav>
 
         <button className="logout-button" onClick={handleLogout}>
