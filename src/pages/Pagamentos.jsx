@@ -78,37 +78,37 @@ export default function Pagamentos() {
         <div className="card-resumo">
           <span>Receita Prevista</span>
 
-          <strong>R$ {dash?.receita_prevista.toFixed(2) ?? 0}</strong>
+          <strong>R$ {dash?.receita_prevista ?? 0}</strong>
         </div>
 
         <div className="card-resumo">
           <span>Receita Recebida</span>
 
-          <strong>R$ {dash?.receita_recebida.toFixed(2) ?? 0}</strong>
+          <strong>R$ {dash?.receita_recebida ?? 0}</strong>
         </div>
 
         <div className="card-resumo">
           <span>A Receber</span>
 
-          <strong>R$ {dash?.receita_prevista.toFixed(2) - dash?.receita_recebida.toFixed(2)}</strong>
+          <strong>R$ {dash?.receita_prevista - dash?.receita_recebida}</strong>
         </div>
 
         <div className="card-resumo">
           <span>Quadra</span>
 
-          <strong>R$ {dash?.custo_quadra.toFixed(2)}</strong>
+          <strong>R$ {dash?.custo_quadra}</strong>
         </div>
 
         <div className="card-resumo">
           <span>Liquido</span>
 
-          <strong>R$ {dash?.receita_liquida.toFixed(2) - 100}</strong>
+          <strong>R$ {dash?.receita_liquida - 100}</strong>
         </div>
 
         <div className="card-resumo">
           <span>Liquido Previsto</span>
 
-          <strong>R$ {dash?.receita_prevista.toFixed(2) - dash?.custo_quadra_estimado.toFixed(2) - 100}</strong>
+          <strong>R$ {dash?.receita_prevista - dash?.custo_quadra_estimado - 100}</strong>
         </div>
       </div>
 
