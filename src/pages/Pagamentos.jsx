@@ -59,15 +59,21 @@ export default function Pagamentos() {
     0,
   );
 
-  const receitaLiquidaPrevista = base.reduce(
-    (acc, p) => acc + Number(p.valor_liquido || 0),
-    0,
-  ) - 100;
+  const receitaLiquidaPrevista =
+    base.reduce(
+      (acc, p) =>
+        acc + (Number(p.valor_total || 0) - Number(p.valor_quadra || 0)),
+      0,
+    ) - 100;
 
-  const receitaLiquida = base.reduce(
-    (acc, p) => (p.pago ? acc + Number(p.valor_liquido || 0) : acc),
-    0,
-  ) - 100;
+  const receitaLiquida =
+    base.reduce(
+      (acc, p) =>
+        p.pago
+          ? acc + (Number(p.valor_total || 0) - Number(p.valor_quadra || 0))
+          : acc,
+      0,
+    ) - 100;
 
   async function alterarStatus(pagamento) {
     await atualizarPagamento(pagamento.id, !pagamento.pago);
