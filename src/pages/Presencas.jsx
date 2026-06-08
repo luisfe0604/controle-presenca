@@ -16,8 +16,6 @@ export default function Presencas() {
   const [alunos, setAlunos] = useState([]);
   const [filtroTurma, setFiltroTurma] = useState("TODAS");
 
-  const totalPresentes = alunos.filter((a) => a.presente).length;
-
   useEffect(() => {
     carregar();
   }, [data]);
@@ -63,6 +61,8 @@ export default function Presencas() {
     if (filtroTurma === "TODAS") return true;
     return a.turma === filtroTurma;
   });
+
+  const totalPresentes = alunosFiltrados.filter((a) => a.presente).length;
 
   return (
     <PageContainer
