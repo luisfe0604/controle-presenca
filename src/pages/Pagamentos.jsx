@@ -17,6 +17,7 @@ export default function Pagamentos() {
   const [mes, setMes] = useState(new Date().toISOString().slice(0, 7));
 
   const [pagamentos, setPagamentos] = useState([]);
+  const [dash, setDash] = useState([]);
   const [filtroTurma, setFiltroTurma] = useState("TODAS");
 
   useEffect(() => {
@@ -27,6 +28,9 @@ export default function Pagamentos() {
     const data = await listarPagamentos(mes);
 
     setPagamentos(data);
+    const dash = await obterDashboard();
+
+    setDash(dash);
   }
 
   const pagamentosFiltrados = pagamentos.filter((p) => {
@@ -42,39 +46,6 @@ export default function Pagamentos() {
     carregar();
   }
 
-  const receitaPrevista = base.reduce(
-    (acc, p) => acc + Number(p.valor_total || 0),
-    0,
-  );
-
-  const receitaRecebida = base.reduce(
-    (acc, p) => (p.pago ? acc + Number(p.valor_total || 0) : acc),
-    0,
-  );
-
-  const valorAReceber = receitaPrevista - receitaRecebida;
-
-  const custoQuadra = base.reduce(
-    (acc, p) => (p.pago ? acc + Number(p.valor_quadra || 0) : acc),
-    0,
-  );
-
-  const receitaLiquidaPrevista =
-    base.reduce(
-      (acc, p) =>
-        acc + (Number(p.valor_total || 0) - Number(p.valor_quadra || 0)),
-      0,
-    ) - 100;
-
-  const receitaLiquida =
-    base.reduce(
-      (acc, p) =>
-        p.pago
-          ? acc + (Number(p.valor_total || 0) - Number(p.valor_quadra || 0))
-          : acc,
-      0,
-    ) - 100;
-
   async function alterarStatus(pagamento) {
     await atualizarPagamento(pagamento.id, !pagamento.pago);
 
@@ -84,7 +55,7 @@ export default function Pagamentos() {
   return (
     <PageContainer
       title="Pagamentos"
-        actions={<Button onClick={gerarMes}>Gerar Mês</Button>}
+      actions={<Button onClick={gerarMes}>Gerar Mês</Button>}
     >
       <div className="filtros">
         <input
@@ -107,37 +78,37 @@ export default function Pagamentos() {
         <div className="card-resumo">
           <span>Receita Prevista</span>
 
-          <strong>R$ {receitaPrevista.toFixed(2)}</strong>
+          <strong>R$ {dash?.receita_prevista.toFixed(2) ?? 0}</strong>
         </div>
 
         <div className="card-resumo">
           <span>Receita Recebida</span>
 
-          <strong>R$ {receitaRecebida.toFixed(2)}</strong>
+          <strong>R$ {dash?.receita_recebida.toFixed(2) ?? 0}</strong>
         </div>
 
         <div className="card-resumo">
           <span>A Receber</span>
 
-          <strong>R$ {valorAReceber.toFixed(2)}</strong>
+          <strong>R$ {dash?.receita_prevista.toFixed(2) - dash?.receita_recebida.toFixed(2)}</strong>
         </div>
 
         <div className="card-resumo">
           <span>Quadra</span>
 
-          <strong>R$ {custoQuadra.toFixed(2)}</strong>
+          <strong>R$ {dash?.custo_quadra.toFixed(2)}</strong>
         </div>
 
         <div className="card-resumo">
           <span>Liquido</span>
 
-          <strong>R$ {receitaLiquida.toFixed(2)}</strong>
+          <strong>R$ {dash?.receita_liquida.toFixed(2) - 100}</strong>
         </div>
 
         <div className="card-resumo">
           <span>Liquido Previsto</span>
 
-          <strong>R$ {receitaLiquidaPrevista.toFixed(2)}</strong>
+          <strong>R$ {dash?.receita_prevista.toFixed(2) - dash?.custo_quadra_estimado.toFixed(2) - 100}</strong>
         </div>
       </div>
 
