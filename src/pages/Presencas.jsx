@@ -30,19 +30,19 @@ export default function Presencas() {
     const novoValor = !aluno.presente;
 
     setAlunos((prev) =>
-      prev.map((a) => (a.id === aluno.id ? { ...a, presente: novoValor } : a)),
+      prev.map((a) => (a.aluno_id === aluno.aluno_id ? { ...a, presente: novoValor } : a)),
     );
 
     try {
       await salvarPresenca({
-        aluno_id: aluno.id,
+        aluno_id: aluno.aluno_id,
         data,
         presente: novoValor,
       });
     } catch (err) {
       setAlunos((prev) =>
         prev.map((a) =>
-          a.id === aluno.id ? { ...a, presente: !novoValor } : a,
+          a.aluno_id === aluno.aluno_id ? { ...a, presente: !novoValor } : a,
         ),
       );
 
