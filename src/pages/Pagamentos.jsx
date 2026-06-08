@@ -43,12 +43,12 @@ export default function Pagamentos() {
   }
 
   const receitaPrevista = base.reduce(
-    (acc, p) => acc + Number(p.valor_total || 0),
+    (acc, p) => acc + Number(p.valor_cobrado || 0),
     0,
   );
 
   const receitaRecebida = base.reduce(
-    (acc, p) => (p.pago ? acc + Number(p.valor_total || 0) : acc),
+    (acc, p) => (p.pago ? acc + Number(p.valor_cobrado || 0) : acc),
     0,
   );
 
