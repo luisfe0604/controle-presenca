@@ -84,7 +84,7 @@ export default function Pagamentos() {
   return (
     <PageContainer
       title="Pagamentos"
-      //   actions={<Button onClick={gerarMes}>Gerar Mês</Button>}
+        actions={<Button onClick={gerarMes}>Gerar Mês</Button>}
     >
       <div className="filtros">
         <input
