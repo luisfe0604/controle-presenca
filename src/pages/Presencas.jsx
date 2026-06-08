@@ -26,31 +26,28 @@ export default function Presencas() {
     setAlunos(response);
   }
 
-  async function salvar() {
-    await Promise.all(
-      alunos.map((aluno) =>
-        salvarPresenca({
-          aluno_id: aluno.id,
-          data,
-          presente: aluno.presente,
-        }),
-      ),
-    );
+  async function toggle(aluno) {
+    const novoValor = !aluno.presente;
 
-    alert("Presenças salvas");
-  }
-
-  function toggle(id) {
     setAlunos((prev) =>
-      prev.map((aluno) =>
-        aluno.id === id
-          ? {
-              ...aluno,
-              presente: !aluno.presente,
-            }
-          : aluno,
-      ),
+      prev.map((a) => (a.id === aluno.id ? { ...a, presente: novoValor } : a)),
     );
+
+    try {
+      await salvarPresenca({
+        aluno_id: aluno.id,
+        data,
+        presente: novoValor,
+      });
+    } catch (err) {
+      setAlunos((prev) =>
+        prev.map((a) =>
+          a.id === aluno.id ? { ...a, presente: !novoValor } : a,
+        ),
+      );
+
+      alert("Erro ao salvar presença");
+    }
   }
 
   const turmaA = alunos.filter((a) => a.turma === "A");
@@ -67,7 +64,6 @@ export default function Presencas() {
   return (
     <PageContainer
       title="Presenças"
-      actions={<Button onClick={salvar}>Salvar</Button>}
     >
       <input
         type="date"
@@ -105,7 +101,7 @@ export default function Presencas() {
               type="checkbox"
               checked={aluno.presente}
               disabled={aluno.inativo}
-              onChange={() => toggle(aluno.id)}
+              onChange={() => toggle(aluno)}
             />
 
             {aluno.nome}
