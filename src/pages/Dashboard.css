@@ -1,0 +1,24 @@
+.dashboard-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+
+  gap: 20px;
+}
+
+.dashboard-grid .card h3 {
+  margin-top: 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+.dashboard-grid .card strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.2;
+}

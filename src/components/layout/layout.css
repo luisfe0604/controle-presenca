@@ -1,0 +1,142 @@
+* {
+  box-sizing: border-box;
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.sidebar {
+  width: 260px;
+  height: 100vh; /* 🔥 chave principal */
+  background: #1f2937;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px;
+  gap: 20px;
+
+  position: sticky;
+  top: 0;
+}
+
+.sidebar-header {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar nav a {
+  color: white;
+  text-decoration: none;
+
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.sidebar nav a.active {
+  background: #374151;
+}
+
+.logout-button {
+  margin-top: auto;
+
+  border: none;
+
+  padding: 12px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.app-content {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 64px;
+
+  background: white;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 0 20px;
+
+  border-bottom: 1px solid #ddd;
+}
+
+.menu-button {
+  display: none;
+
+  border: none;
+  background: none;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.page-content {
+  flex: 1;
+
+  padding: 24px;
+}
+
+.backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .menu-button {
+    display: block;
+  }
+
+  .header {
+    font-size: 14px;
+  }
+
+  .sidebar {
+    position: fixed;
+
+    top: 0;
+    left: -260px;
+
+    height: 100vh;
+
+    z-index: 1000;
+
+    transition: 0.2s;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .backdrop {
+    display: block;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.3);
+
+    z-index: 999;
+  }
+}

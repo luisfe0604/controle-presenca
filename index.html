@@ -1,61 +1,8 @@
 <!doctype html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastro de Alunos</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
   <body>
-    <nav>
-      <a href="index.html">Cadastro</a>
-      <a href="presenca.html">Presença</a>
-      <a href="pagamentos.html">Pagamentos</a>
-      <a id="logout">Sair</a>
-    </nav>
-
-    <h1>Cadastro de Alunos</h1>
-
-    <form id="alunoForm">
-      <input type="text" id="nome" placeholder="Nome do aluno" required />
-
-      <select id="turma" required>
-        <option value="">Selecione a turma</option>
-        <option value="A">Turma A</option>
-        <option value="B">Turma B</option>
-      </select>
-
-      <button type="submit">Cadastrar</button>
-    </form>
-
-    <ul id="listaAlunos"></ul>
-
-    <script>
-      document.getElementById("logout").addEventListener("click", async () => {
-        const confirmar = confirm("Deseja realmente sair?");
-        if (!confirmar) return;
-
-        const { error } = await supabaseClient.auth.signOut();
-
-        if (error) {
-          alert("Erro ao sair");
-          return;
-        }
-
-        window.location.href = "login.html";
-      });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="supabase.js"></script>
-    <script src="cadastro.js"></script>
-
-    <script>
-      supaBase.auth.getSession().then(({ data }) => {
-        if (!data.session) {
-          window.location.href = "login.html";
-        }
-      });
-    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
