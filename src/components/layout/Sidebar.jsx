@@ -1,10 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 import { supabase } from "../../services/supabase";
 
 import "./layout.css";
 
 export default function Sidebar({ open, onClose }) {
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   async function handleLogout() {
