@@ -4,6 +4,8 @@ import PageContainer from "../components/ui/PageContainer";
 
 import Button from "../components/ui/Button";
 
+import { obterDashboard } from "../services/dashboard.service";
+
 import {
   listarPagamentos,
   fecharMes,
