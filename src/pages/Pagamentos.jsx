@@ -59,6 +59,13 @@ export default function Pagamentos() {
     0,
   );
 
+  const custoQuadraPrevisto = base.reduce(
+    (acc, p) => acc + Number(p.valor_quadra || 0),
+    0,
+  );
+
+  const receitaLiquidaPrevista = receitaPrevista - custoQuadraPrevisto - 100;
+
   const receitaLiquida = receitaRecebida - custoQuadra - 100;
 
   async function alterarStatus(pagamento) {
@@ -70,7 +77,7 @@ export default function Pagamentos() {
   return (
     <PageContainer
       title="Pagamentos"
-    //   actions={<Button onClick={gerarMes}>Gerar Mês</Button>}
+      //   actions={<Button onClick={gerarMes}>Gerar Mês</Button>}
     >
       <div className="filtros">
         <input
@@ -118,6 +125,12 @@ export default function Pagamentos() {
           <span>Liquido</span>
 
           <strong>R$ {receitaLiquida.toFixed(2)}</strong>
+        </div>
+
+        <div className="card-resumo">
+          <span>Liquido Previsto</span>
+
+          <strong>R$ {receitaLiquidaPrevista.toFixed(2)}</strong>
         </div>
       </div>
 
