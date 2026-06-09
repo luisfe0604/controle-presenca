@@ -21,13 +21,30 @@ export default function Sidebar({ open, onClose }) {
         <div className="sidebar-header">🏐 Vôlei</div>
 
         <nav>
-          <NavLink to="/" onClick={onClose}>Dashboard</NavLink>
+          <NavLink to="/" onClick={onClose}>
+            Dashboard
+          </NavLink>
 
-          <NavLink to="/alunos" onClick={onClose}>Alunos</NavLink>
+          <NavLink to="/alunos" onClick={onClose}>
+            Alunos
+          </NavLink>
 
-          <NavLink to="/presencas" onClick={onClose}>Presenças</NavLink>
+          <NavLink to="/presencas" onClick={onClose}>
+            Presenças
+          </NavLink>
 
-          <NavLink to="/pagamentos" onClick={onClose}>Pagamentos</NavLink>
+          <NavLink to="/pagamentos" onClick={onClose}>
+            Pagamentos
+          </NavLink>
+
+          <a
+            className="external"
+            href="https://score-pink.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Placar
+          </a>
         </nav>
 
         <button className="logout-button" onClick={handleLogout}>
