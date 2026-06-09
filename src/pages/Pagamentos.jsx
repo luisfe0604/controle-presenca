@@ -78,18 +78,6 @@ export default function Pagamentos() {
 
       <div className="pagamentos-cards">
         <div className="card-resumo">
-          <span>Receita Prevista</span>
-
-          <strong>R$ {dash?.receita_prevista ?? 0}</strong>
-        </div>
-
-        <div className="card-resumo">
-          <span>Receita Recebida</span>
-
-          <strong>R$ {dash?.receita_recebida ?? 0}</strong>
-        </div>
-
-        <div className="card-resumo">
           <span>Quadra</span>
 
           <strong>R$ {dash?.custo_quadra}</strong>
