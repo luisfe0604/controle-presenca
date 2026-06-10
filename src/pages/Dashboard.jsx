@@ -51,7 +51,7 @@ export default function Dashboard() {
           <h3>Receita Líquida Prevista</h3>
 
           <strong>
-            {dados?.receita_prevista - dados?.custo_quadra_estimado - 100}
+            R$ {(dados?.receita_prevista - dados?.custo_quadra_estimado - 100).toFixed(2)}
           </strong>
         </Card>
         <Card>
@@ -69,10 +69,10 @@ export default function Dashboard() {
 
           <strong>
             R${" "}
-            {dados?.receita_prevista -
+            {(dados?.receita_prevista -
               dados?.custo_quadra_estimado -
               100 -
-              (dados?.receita_liquida - 100)}
+              (dados?.receita_liquida - 100)).toFixed(2)}
           </strong>
         </Card>
         <Card>
