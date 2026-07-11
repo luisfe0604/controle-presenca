@@ -191,7 +191,7 @@ export default function PagamentosPage() {
               <tr className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">
                 <th className="px-4 py-3 font-semibold">Nome</th>
                 <th className="px-4 py-3 font-semibold">Turma</th>
-                <th className="px-4 py-3 font-semibold">Plano</th>
+                <th className="hidden px-4 py-3 font-semibold sm:table-cell">Plano</th>
                 <th className="px-4 py-3 font-semibold">Valor</th>
                 <th className="px-4 py-3 text-right font-semibold">Pago</th>
               </tr>
@@ -210,7 +210,9 @@ export default function PagamentosPage() {
                       {linha.turma}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-ink-soft">{linha.plano}</td>
+                  <td className="hidden px-4 py-3 text-ink-soft sm:table-cell">
+                    {linha.plano}
+                  </td>
                   <td className="px-4 py-3 tabular font-semibold text-ink">
                     {formatBRL(linha.valor_total)}
                   </td>
