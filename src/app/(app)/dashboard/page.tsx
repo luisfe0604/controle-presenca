@@ -5,12 +5,6 @@ import type { DashboardResumo } from "@/lib/types";
 import { api } from "@/lib/api";
 import { formatBRL, currentMonth } from "@/lib/format";
 
-interface Metric {
-  label: string;
-  value: string;
-  hint?: string;
-}
-
 export default function DashboardPage() {
   const [mes, setMes] = useState(currentMonth());
   const [resumo, setResumo] = useState<DashboardResumo | null>(null);
@@ -34,18 +28,16 @@ export default function DashboardPage() {
     carregar();
   }, [carregar]);
 
-  const metrics: Metric[] = resumo
+  const financeiro = resumo
     ? [
-        { label: "Alunos ativos", value: String(resumo.alunos_ativos) },
-        { label: "Inadimplentes", value: String(resumo.inadimplentes) },
         { label: "Receita prevista", value: formatBRL(resumo.receita_prevista) },
         { label: "Receita recebida", value: formatBRL(resumo.receita_recebida) },
-        { label: "Valor a receber", value: formatBRL(resumo.valor_a_receber) },
         {
-          label: "Receita líquida",
-          value: formatBRL(resumo.receita_liquida),
-          hint: "Recebido menos custo de quadra",
+          label: "A receber",
+          value: formatBRL(resumo.valor_a_receber),
+          alert: resumo.valor_a_receber > 0,
         },
+        { label: "Receita líquida", value: formatBRL(resumo.receita_liquida) },
         { label: "Custo de quadra", value: formatBRL(resumo.custo_quadra) },
         {
           label: "Custo de quadra estimado",
@@ -55,35 +47,72 @@ export default function DashboardPage() {
     : [];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-neutral-900">Dashboard</h1>
+    <div className="space-y-8">
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-soft">
+            Placar do mês
+          </p>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-ink">
+            Visão geral
+          </h1>
+        </div>
         <input
           type="month"
           value={mes}
           onChange={(e) => setMes(e.target.value)}
-          className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none"
+          className="rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-court"
         />
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      {loading ? (
-        <p className="text-sm text-neutral-500">Carregando...</p>
+      {error && <p className="text-sm text-flare">{error}</p>}
+
+      {loading || !resumo ? (
+        <p className="text-sm text-ink-soft">Carregando...</p>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {metrics.map((m) => (
-            <div
-              key={m.label}
-              className="rounded-xl border border-neutral-200 bg-white p-5"
-            >
-              <p className="text-sm text-neutral-500">{m.label}</p>
-              <p className="mt-2 text-2xl font-semibold text-neutral-900">
-                {m.value}
+        <>
+          {/* Placar principal — o número que importa no dia a dia */}
+          <div className="grid grid-cols-2 overflow-hidden rounded-2xl bg-ink text-chalk">
+            <div className="p-8">
+              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-chalk/50">
+                Alunos ativos
               </p>
-              {m.hint && <p className="mt-1 text-xs text-neutral-400">{m.hint}</p>}
+              <p className="tabular mt-3 text-6xl font-black leading-none">
+                {resumo.alunos_ativos}
+              </p>
             </div>
-          ))}
-        </div>
+            <div className="border-l border-white/10 p-8">
+              <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-chalk/50">
+                Inadimplentes
+              </p>
+              <p
+                className={`tabular mt-3 text-6xl font-black leading-none ${
+                  resumo.inadimplentes > 0 ? "text-flare" : "text-chalk"
+                }`}
+              >
+                {resumo.inadimplentes}
+              </p>
+            </div>
+          </div>
+
+          {/* Leituras financeiras — quietas */}
+          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {financeiro.map((m) => (
+              <div key={m.label} className="bg-paper p-5">
+                <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft">
+                  {m.label}
+                </p>
+                <p
+                  className={`tabular mt-2 text-2xl font-extrabold ${
+                    m.alert ? "text-flare" : "text-ink"
+                  }`}
+                >
+                  {m.value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

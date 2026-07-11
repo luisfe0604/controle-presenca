@@ -77,70 +77,91 @@ export default function PagamentosPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold text-neutral-900">Pagamentos</h1>
-        <div className="flex items-center gap-3">
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-soft">
+            Mensalidades
+          </p>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-ink">
+            Pagamentos
+          </h1>
+        </div>
+        <div className="flex items-center gap-2">
           <input
             type="month"
             value={mes}
             onChange={(e) => setMes(e.target.value)}
-            className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none"
+            className="rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-court"
           />
           <button
             onClick={baixarCsv}
-            className="rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
+            className="rounded-lg border border-line bg-paper px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-mist"
           >
             Exportar CSV
           </button>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-4">
-        <div className="rounded-lg border border-neutral-200 bg-white px-5 py-3">
-          <p className="text-xs text-neutral-500">Recebido</p>
-          <p className="text-lg font-semibold text-green-700">
+      <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-line bg-paper">
+        <div className="p-5">
+          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft">
+            Recebido
+          </p>
+          <p className="tabular mt-1 text-2xl font-extrabold text-court-deep">
             {formatBRL(totalRecebido)}
           </p>
         </div>
-        <div className="rounded-lg border border-neutral-200 bg-white px-5 py-3">
-          <p className="text-xs text-neutral-500">Previsto</p>
-          <p className="text-lg font-semibold text-neutral-900">
+        <div className="border-l border-line p-5">
+          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft">
+            Previsto
+          </p>
+          <p className="tabular mt-1 text-2xl font-extrabold text-ink">
             {formatBRL(totalPrevisto)}
           </p>
         </div>
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-neutral-600">
+      <label className="flex w-fit items-center gap-2 text-sm text-ink-soft">
         <input
           type="checkbox"
           checked={somenteInadimplentes}
           onChange={(e) => setSomenteInadimplentes(e.target.checked)}
+          className="accent-court"
         />
         Mostrar apenas inadimplentes
       </label>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-flare">{error}</p>}
       {loading ? (
-        <p className="text-sm text-neutral-500">Carregando...</p>
+        <p className="text-sm text-ink-soft">Carregando...</p>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-neutral-200">
+        <div className="overflow-hidden rounded-xl border border-line bg-paper">
           <table className="w-full text-sm">
-            <thead className="bg-neutral-50 text-left text-neutral-500">
-              <tr>
-                <th className="px-4 py-3 font-medium">Nome</th>
-                <th className="px-4 py-3 font-medium">Turma</th>
-                <th className="px-4 py-3 font-medium">Plano</th>
-                <th className="px-4 py-3 font-medium">Valor</th>
-                <th className="px-4 py-3 text-right font-medium">Pago</th>
+            <thead className="border-b border-line text-left">
+              <tr className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">
+                <th className="px-4 py-3 font-semibold">Nome</th>
+                <th className="px-4 py-3 font-semibold">Turma</th>
+                <th className="px-4 py-3 font-semibold">Plano</th>
+                <th className="px-4 py-3 font-semibold">Valor</th>
+                <th className="px-4 py-3 text-right font-semibold">Pago</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-100">
+            <tbody className="divide-y divide-mist">
               {visiveis.map((linha) => (
-                <tr key={linha.aluno_id} className="hover:bg-neutral-50">
-                  <td className="px-4 py-3 text-neutral-900">{linha.nome}</td>
-                  <td className="px-4 py-3 text-neutral-600">{linha.turma}</td>
-                  <td className="px-4 py-3 text-neutral-600">{linha.plano}</td>
-                  <td className="px-4 py-3 text-neutral-600">
+                <tr
+                  key={linha.aluno_id}
+                  className={`transition-colors ${
+                    linha.pago ? "bg-court/5" : "hover:bg-chalk"
+                  }`}
+                >
+                  <td className="px-4 py-3 font-medium text-ink">{linha.nome}</td>
+                  <td className="px-4 py-3">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-mist font-display text-xs font-bold text-ink">
+                      {linha.turma}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-ink-soft">{linha.plano}</td>
+                  <td className="px-4 py-3 tabular font-semibold text-ink">
                     {formatBRL(linha.valor_total)}
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -149,14 +170,14 @@ export default function PagamentosPage() {
                       checked={!!linha.pago}
                       disabled={!linha.id || salvando === linha.id}
                       onChange={() => togglePago(linha)}
-                      className="h-5 w-5 cursor-pointer accent-green-600"
+                      className="h-5 w-5 cursor-pointer accent-court"
                     />
                   </td>
                 </tr>
               ))}
               {visiveis.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-neutral-400">
+                  <td colSpan={5} className="px-4 py-10 text-center text-ink-soft">
                     Nenhum pagamento neste mês.
                   </td>
                 </tr>

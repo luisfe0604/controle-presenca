@@ -55,60 +55,72 @@ export default function AlunosPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-neutral-900">Alunos</h1>
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-soft">
+            Elenco
+          </p>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-ink">
+            Alunos
+          </h1>
+        </div>
         <button
           onClick={abrirNovo}
-          className="rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white"
+          className="rounded-lg bg-court px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-court-deep"
         >
           Novo aluno
         </button>
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-neutral-600">
+      <label className="flex w-fit items-center gap-2 text-sm text-ink-soft">
         <input
           type="checkbox"
           checked={mostrarInativos}
           onChange={(e) => setMostrarInativos(e.target.checked)}
+          className="accent-court"
         />
         Mostrar inativos
       </label>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-flare">{error}</p>}
       {loading ? (
-        <p className="text-sm text-neutral-500">Carregando...</p>
+        <p className="text-sm text-ink-soft">Carregando...</p>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-neutral-200">
+        <div className="overflow-hidden rounded-xl border border-line bg-paper">
           <table className="w-full text-sm">
-            <thead className="bg-neutral-50 text-left text-neutral-500">
-              <tr>
-                <th className="px-4 py-3 font-medium">Nome</th>
-                <th className="px-4 py-3 font-medium">Turma</th>
-                <th className="px-4 py-3 font-medium">Plano</th>
-                <th className="px-4 py-3 font-medium">Mensalidade</th>
-                <th className="px-4 py-3 font-medium">Status</th>
+            <thead className="border-b border-line text-left">
+              <tr className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">
+                <th className="px-4 py-3 font-semibold">Nome</th>
+                <th className="px-4 py-3 font-semibold">Turma</th>
+                <th className="px-4 py-3 font-semibold">Plano</th>
+                <th className="px-4 py-3 font-semibold">Mensalidade</th>
+                <th className="px-4 py-3 font-semibold">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-100">
+            <tbody className="divide-y divide-mist">
               {visiveis.map((aluno) => (
                 <tr
                   key={aluno.id}
                   onClick={() => abrirEdicao(aluno)}
-                  className="cursor-pointer hover:bg-neutral-50"
+                  className="cursor-pointer transition-colors hover:bg-chalk"
                 >
-                  <td className="px-4 py-3 text-neutral-900">{aluno.nome}</td>
-                  <td className="px-4 py-3 text-neutral-600">{aluno.turma}</td>
-                  <td className="px-4 py-3 text-neutral-600">{aluno.plano}</td>
-                  <td className="px-4 py-3 text-neutral-600">
+                  <td className="px-4 py-3 font-medium text-ink">{aluno.nome}</td>
+                  <td className="px-4 py-3">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-mist font-display text-xs font-bold text-ink">
+                      {aluno.turma}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-ink-soft">{aluno.plano}</td>
+                  <td className="px-4 py-3 tabular font-semibold text-ink">
                     {formatBRL(aluno.valor_total)}
                   </td>
                   <td className="px-4 py-3">
                     {aluno.inativo ? (
-                      <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-500">
+                      <span className="rounded-full bg-mist px-2 py-0.5 text-xs font-medium text-ink-soft">
                         Inativo
                       </span>
                     ) : (
-                      <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700">
+                      <span className="rounded-full bg-court/10 px-2 py-0.5 text-xs font-medium text-court-deep">
                         Ativo
                       </span>
                     )}
@@ -117,8 +129,8 @@ export default function AlunosPage() {
               ))}
               {visiveis.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-neutral-400">
-                    Nenhum aluno cadastrado.
+                  <td colSpan={5} className="px-4 py-10 text-center text-ink-soft">
+                    Nenhum aluno cadastrado ainda.
                   </td>
                 </tr>
               )}

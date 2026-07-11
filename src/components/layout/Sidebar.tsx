@@ -5,11 +5,20 @@ import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 const links = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/alunos", label: "Alunos" },
-  { href: "/presencas", label: "Presenças" },
-  { href: "/pagamentos", label: "Pagamentos" },
+  { href: "/dashboard", label: "Placar", hint: "Visão geral" },
+  { href: "/presencas", label: "Presenças", hint: "Chamada do dia" },
+  { href: "/alunos", label: "Alunos", hint: "Cadastro e turmas" },
+  { href: "/pagamentos", label: "Pagamentos", hint: "Mensalidades" },
 ];
+
+function Logomark() {
+  return (
+    <span className="relative flex h-9 w-9 items-center justify-center rounded-md bg-court">
+      <span className="absolute inset-y-1.5 left-1/2 w-px -translate-x-1/2 bg-chalk/70" />
+      <span className="relative h-2 w-2 rounded-full bg-flare" />
+    </span>
+  );
+}
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -23,29 +32,46 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex h-screen w-56 flex-col justify-between border-r border-neutral-200 bg-white p-4">
-      <nav className="space-y-1">
-        {links.map((link) => {
-          const active = pathname.startsWith(link.href);
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`block rounded-md px-3 py-2 text-sm font-medium ${
-                active
-                  ? "bg-neutral-900 text-white"
-                  : "text-neutral-700 hover:bg-neutral-100"
-              }`}
-            >
-              {link.label}
-            </Link>
-          );
-        })}
-      </nav>
+    <aside className="flex h-screen w-64 shrink-0 flex-col justify-between bg-ink px-5 py-6 text-chalk">
+      <div className="space-y-8">
+        <div className="flex items-center gap-3">
+          <Logomark />
+          <div className="leading-tight">
+            <p className="font-display text-lg font-extrabold tracking-tight">QUADRA</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-chalk/50">
+              Gestão · Vôlei
+            </p>
+          </div>
+        </div>
+
+        <nav className="space-y-1">
+          {links.map((link) => {
+            const active = pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`group flex flex-col rounded-lg px-3 py-2.5 transition-colors ${
+                  active ? "bg-court text-white" : "text-chalk/70 hover:bg-white/5"
+                }`}
+              >
+                <span className="text-sm font-semibold">{link.label}</span>
+                <span
+                  className={`text-[11px] ${
+                    active ? "text-white/70" : "text-chalk/40"
+                  }`}
+                >
+                  {link.hint}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
 
       <button
         onClick={handleLogout}
-        className="rounded-md px-3 py-2 text-left text-sm font-medium text-neutral-500 hover:bg-neutral-100"
+        className="rounded-lg px-3 py-2.5 text-left text-sm font-medium text-chalk/50 transition-colors hover:bg-white/5 hover:text-chalk"
       >
         Sair
       </button>

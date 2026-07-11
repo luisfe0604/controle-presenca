@@ -5,6 +5,8 @@ import type { PresencaLinha, Turma } from "@/lib/types";
 import { api } from "@/lib/api";
 import { todayISO } from "@/lib/format";
 
+const TURMAS: (Turma | "todas")[] = ["todas", "A", "B"];
+
 export default function PresencasPage() {
   const [data, setData] = useState(todayISO());
   const [linhas, setLinhas] = useState<PresencaLinha[]>([]);
@@ -34,7 +36,6 @@ export default function PresencasPage() {
     const novoValor = !linha.presente;
     setSalvando(linha.aluno_id);
 
-    // Atualização otimista.
     setLinhas((prev) =>
       prev.map((l) =>
         l.aluno_id === linha.aluno_id ? { ...l, presente: novoValor } : l,
@@ -49,7 +50,6 @@ export default function PresencasPage() {
       });
     } catch (err) {
       setError((err as Error).message);
-      // Reverte em caso de erro.
       setLinhas((prev) =>
         prev.map((l) =>
           l.aluno_id === linha.aluno_id ? { ...l, presente: !novoValor } : l,
@@ -72,70 +72,90 @@ export default function PresencasPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold text-neutral-900">Presenças</h1>
-
-      <div className="flex flex-wrap items-end gap-4">
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-neutral-700">Data</label>
-          <input
-            type="date"
-            value={data}
-            onChange={(e) => setData(e.target.value)}
-            className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none"
-          />
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-soft">
+            Chamada do dia
+          </p>
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-ink">
+            Presenças
+          </h1>
         </div>
-
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-neutral-700">Turma</label>
-          <select
-            value={filtroTurma}
-            onChange={(e) => setFiltroTurma(e.target.value as Turma | "todas")}
-            className="rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-neutral-500 focus:outline-none"
-          >
-            <option value="todas">Todas</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-          </select>
-        </div>
-
-        <p className="ml-auto text-sm text-neutral-500">
-          {presentes} de {visiveis.length} presentes
-        </p>
+        <input
+          type="date"
+          value={data}
+          onChange={(e) => setData(e.target.value)}
+          className="rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-court"
+        />
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="inline-flex rounded-lg border border-line bg-paper p-1">
+          {TURMAS.map((t) => (
+            <button
+              key={t}
+              onClick={() => setFiltroTurma(t)}
+              className={`rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
+                filtroTurma === t
+                  ? "bg-ink text-chalk"
+                  : "text-ink-soft hover:text-ink"
+              }`}
+            >
+              {t === "todas" ? "Todas" : `Turma ${t}`}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-baseline gap-2">
+          <span className="tabular text-2xl font-black text-court">{presentes}</span>
+          <span className="text-sm text-ink-soft">
+            de {visiveis.length} presentes
+          </span>
+        </div>
+      </div>
+
+      {error && <p className="text-sm text-flare">{error}</p>}
       {loading ? (
-        <p className="text-sm text-neutral-500">Carregando...</p>
+        <p className="text-sm text-ink-soft">Carregando...</p>
       ) : (
-        <div className="overflow-hidden rounded-lg border border-neutral-200">
+        <div className="overflow-hidden rounded-xl border border-line bg-paper">
           <table className="w-full text-sm">
-            <thead className="bg-neutral-50 text-left text-neutral-500">
-              <tr>
-                <th className="px-4 py-3 font-medium">Nome</th>
-                <th className="px-4 py-3 font-medium">Turma</th>
-                <th className="px-4 py-3 text-right font-medium">Presente</th>
+            <thead className="border-b border-line text-left">
+              <tr className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">
+                <th className="px-4 py-3 font-semibold">Nome</th>
+                <th className="px-4 py-3 font-semibold">Turma</th>
+                <th className="px-4 py-3 text-right font-semibold">Presente</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-100">
+            <tbody className="divide-y divide-mist">
               {visiveis.map((linha) => (
-                <tr key={linha.aluno_id} className="hover:bg-neutral-50">
-                  <td className="px-4 py-3 text-neutral-900">{linha.nome}</td>
-                  <td className="px-4 py-3 text-neutral-600">{linha.turma}</td>
+                <tr
+                  key={linha.aluno_id}
+                  className={`transition-colors ${
+                    linha.presente ? "bg-court/5" : "hover:bg-chalk"
+                  }`}
+                >
+                  <td className="px-4 py-3 font-medium text-ink">{linha.nome}</td>
+                  <td className="px-4 py-3">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-mist font-display text-xs font-bold text-ink">
+                      {linha.turma}
+                    </span>
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <input
                       type="checkbox"
                       checked={linha.presente}
                       disabled={salvando === linha.aluno_id}
                       onChange={() => togglePresenca(linha)}
-                      className="h-5 w-5 cursor-pointer accent-neutral-900"
+                      className="h-5 w-5 cursor-pointer accent-court"
                     />
                   </td>
                 </tr>
               ))}
               {visiveis.length === 0 && (
                 <tr>
-                  <td colSpan={3} className="px-4 py-8 text-center text-neutral-400">
-                    Nenhum aluno ativo.
+                  <td colSpan={3} className="px-4 py-10 text-center text-ink-soft">
+                    Nenhum aluno ativo nesta turma.
                   </td>
                 </tr>
               )}
