@@ -88,14 +88,16 @@ export default function AlunosPage() {
       {loading ? (
         <p className="text-sm text-ink-soft">Carregando...</p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-line bg-paper">
+        <div className="overflow-x-auto rounded-xl border border-line bg-paper">
           <table className="w-full text-sm">
             <thead className="border-b border-line text-left">
               <tr className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">
                 <th className="px-4 py-3 font-semibold">Nome</th>
                 <th className="px-4 py-3 font-semibold">Turma</th>
                 <th className="px-4 py-3 font-semibold">Plano</th>
-                <th className="px-4 py-3 font-semibold">Mensalidade</th>
+                <th className="hidden px-4 py-3 font-semibold sm:table-cell">
+                  Mensalidade
+                </th>
                 <th className="px-4 py-3 font-semibold">Status</th>
               </tr>
             </thead>
@@ -113,7 +115,7 @@ export default function AlunosPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-ink-soft">{aluno.plano}</td>
-                  <td className="px-4 py-3 tabular font-semibold text-ink">
+                  <td className="hidden px-4 py-3 tabular font-semibold text-ink sm:table-cell">
                     {formatBRL(aluno.valor_total)}
                   </td>
                   <td className="px-4 py-3">

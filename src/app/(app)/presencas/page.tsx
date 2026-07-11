@@ -120,7 +120,7 @@ export default function PresencasPage() {
       {loading ? (
         <p className="text-sm text-ink-soft">Carregando...</p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-line bg-paper">
+        <div className="overflow-x-auto rounded-xl border border-line bg-paper">
           <table className="w-full text-sm">
             <thead className="border-b border-line text-left">
               <tr className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">

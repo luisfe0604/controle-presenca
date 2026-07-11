@@ -125,7 +125,7 @@ export default function PagamentosPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-end justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-soft">
             Mensalidades
@@ -134,7 +134,7 @@ export default function PagamentosPage() {
             Pagamentos
           </h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <input
             type="month"
             value={mes}
@@ -185,7 +185,7 @@ export default function PagamentosPage() {
       {loading ? (
         <p className="text-sm text-ink-soft">Carregando...</p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-line bg-paper">
+        <div className="overflow-x-auto rounded-xl border border-line bg-paper">
           <table className="w-full text-sm">
             <thead className="border-b border-line text-left">
               <tr className="text-[11px] uppercase tracking-[0.12em] text-ink-soft">

@@ -91,20 +91,20 @@ export function Sidebar() {
   return (
     <>
       {/* Barra superior — visível só no mobile */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-line bg-ink px-4 text-chalk lg:hidden">
+      <header className="flex h-14 shrink-0 items-center gap-2.5 border-b border-line bg-ink px-4 text-chalk lg:hidden">
+        <button
+          onClick={() => setOpen(true)}
+          aria-label="Abrir menu"
+          className="-ml-2 rounded-md p-2 text-chalk/80 transition-colors hover:bg-white/5"
+        >
+          <MenuIcon />
+        </button>
         <div className="flex items-center gap-2.5">
           <Logomark />
           <p className="font-display text-base font-extrabold tracking-tight">
             Presença
           </p>
         </div>
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Abrir menu"
-          className="rounded-md p-2 text-chalk/80 transition-colors hover:bg-white/5"
-        >
-          <MenuIcon />
-        </button>
       </header>
 
       {/* Overlay do drawer — mobile, fecha ao clicar fora */}
@@ -117,7 +117,7 @@ export function Sidebar() {
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex h-screen w-72 max-w-[85vw] shrink-0 flex-col justify-between bg-ink px-5 py-6 text-chalk transition-transform duration-200 ease-out lg:static lg:z-auto lg:w-64 lg:max-w-none lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex h-dvh w-72 max-w-[85vw] shrink-0 flex-col justify-between bg-ink px-5 py-6 text-chalk transition-transform duration-200 ease-out lg:static lg:z-auto lg:h-screen lg:w-64 lg:max-w-none lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
