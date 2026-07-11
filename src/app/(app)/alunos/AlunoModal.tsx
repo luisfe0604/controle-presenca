@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Aluno, Plano, Turma } from "@/lib/types";
 import { api } from "@/lib/api";
 
@@ -23,10 +23,6 @@ export function AlunoModal({ aluno, planos, onClose, onSaved }: Props) {
   const [inativo, setInativo] = useState(aluno?.inativo ?? false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (planoId === "" && planos.length > 0) setPlanoId(planos[0].id);
-  }, [planos, planoId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

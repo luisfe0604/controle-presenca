@@ -33,6 +33,8 @@ export default function AlunosPage() {
   }, []);
 
   useEffect(() => {
+    // Busca de dados ao montar (sincronização com a API).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     carregar();
   }, [carregar]);
 

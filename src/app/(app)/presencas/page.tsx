@@ -29,6 +29,8 @@ export default function PresencasPage() {
   }, [data]);
 
   useEffect(() => {
+    // Busca de dados ao montar e quando a data muda (sincronização com a API).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     carregar();
   }, [carregar]);
 

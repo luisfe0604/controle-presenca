@@ -28,6 +28,8 @@ export default function PagamentosPage() {
   }, [mes]);
 
   useEffect(() => {
+    // Busca de dados ao montar e quando o mês muda (sincronização com a API).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     carregar();
   }, [carregar]);
 
