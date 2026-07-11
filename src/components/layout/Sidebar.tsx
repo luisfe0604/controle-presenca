@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 const links = [
   { href: "/dashboard", label: "Dashboard", hint: "Visão geral" },
   { href: "/presencas", label: "Presenças", hint: "Chamada do dia" },
+  { href: "/sorteador", label: "Sorteador", hint: "Sortear alunos" },
   { href: "/alunos", label: "Alunos", hint: "Cadastro e turmas" },
   { href: "/pagamentos", label: "Pagamentos", hint: "Mensalidades" },
 ];

@@ -81,9 +81,16 @@ export default function PagamentosPage() {
     receita_liquida: receitaLiquidaBruta,
   });
 
+  const inadimplentes = linhas.filter((l) => !l.pago).length;
+
   const resumoCards = [
     { label: "Recebido", value: formatBRL(totalRecebido), tone: "court" as const },
     { label: "Previsto", value: formatBRL(totalPrevisto), tone: "ink" as const },
+    {
+      label: "Inadimplentes",
+      value: String(inadimplentes),
+      tone: inadimplentes > 0 ? ("flare" as const) : ("ink" as const),
+    },
     { label: "Líquido", value: formatBRL(liquidos.receitaLiquida), tone: "ink" as const },
     {
       label: "Líquido previsto",
@@ -151,7 +158,11 @@ export default function PagamentosPage() {
             </p>
             <p
               className={`tabular mt-1 text-xl font-extrabold ${
-                c.tone === "court" ? "text-court-deep" : "text-ink"
+                c.tone === "court"
+                  ? "text-court-deep"
+                  : c.tone === "flare"
+                    ? "text-flare"
+                    : "text-ink"
               }`}
             >
               {c.value}
