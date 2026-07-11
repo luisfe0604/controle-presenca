@@ -22,7 +22,7 @@ export async function GET(request: Request) {
          COALESCE(SUM(pl.valor_quadra), 0) AS custo_quadra_estimado,
          COALESCE(SUM(CASE WHEN p.pago = true THEN (pl.valor_total - pl.valor_quadra) ELSE 0 END), 0) AS receita_liquida,
          COALESCE(SUM(CASE WHEN COALESCE(p.pago, false) = false THEN pl.valor_total ELSE 0 END), 0) AS valor_a_receber,
-         COUNT(*) FILTER (WHERE COALESCE(p.pago, false) = false AND a.inativo = false)::int AS inadimplentes
+         COUNT(*) FILTER (WHERE COALESCE(p.pago, false) = false AND a.inativo = false AND pl.valor_total > 0)::int AS inadimplentes
        FROM public.alunos a
        INNER JOIN public.planos pl ON pl.id = a.plano_id
        LEFT JOIN public.pagamentos p ON p.aluno_id = a.id AND p.mes = $1
