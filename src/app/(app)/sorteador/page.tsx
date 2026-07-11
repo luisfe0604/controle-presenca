@@ -108,6 +108,10 @@ export default function SorteadorPage() {
 
   const maxQtd = Math.max(1, elegiveis.length);
 
+  const clampQtd = (v: number) =>
+    Number.isNaN(v) ? 1 : Math.min(maxQtd, Math.max(1, v));
+  const ajustarQtd = (delta: number) => setQuantidade((q) => clampQtd(q + delta));
+
   return (
     <div className="space-y-6">
       <div>
@@ -125,16 +129,34 @@ export default function SorteadorPage() {
         <div className="flex flex-wrap items-end gap-4">
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-ink">Quantidade</label>
-            <input
-              type="number"
-              min={1}
-              max={maxQtd}
-              value={quantidade}
-              onChange={(e) =>
-                setQuantidade(Math.max(1, Number(e.target.value) || 1))
-              }
-              className="w-24 rounded-lg border border-line bg-paper px-3 py-2 text-sm text-ink outline-none focus:border-court"
-            />
+            <div className="flex items-stretch overflow-hidden rounded-lg border border-line">
+              <button
+                type="button"
+                onClick={() => ajustarQtd(-1)}
+                disabled={quantidade <= 1}
+                aria-label="Diminuir"
+                className="px-3 text-lg font-semibold text-ink-soft transition-colors hover:bg-mist disabled:opacity-40"
+              >
+                −
+              </button>
+              <input
+                type="number"
+                min={1}
+                max={maxQtd}
+                value={quantidade}
+                onChange={(e) => setQuantidade(clampQtd(Number(e.target.value)))}
+                className="w-12 border-x border-line bg-paper py-2 text-center text-sm text-ink outline-none focus:border-court [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              />
+              <button
+                type="button"
+                onClick={() => ajustarQtd(1)}
+                disabled={quantidade >= maxQtd}
+                aria-label="Aumentar"
+                className="px-3 text-lg font-semibold text-ink-soft transition-colors hover:bg-mist disabled:opacity-40"
+              >
+                +
+              </button>
+            </div>
           </div>
 
           <div className="space-y-1.5">
