@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(C:\\Users\\luife\\Desktop\\Pessoal\\Arquivos\\Freelas\\Kalil\\backend\\**)",
+      "Read(C:\\Users\\luife\\Desktop\\Pessoal\\Arquivos\\Freelas\\Luis F\\Presença\\**)",
+      "Edit(C:\\Users\\luife\\Desktop\\Pessoal\\Arquivos\\Freelas\\Luis F\\Presença\\**)",
+      "Write(C:\\Users\\luife\\Desktop\\Pessoal\\Arquivos\\Freelas\\Luis F\\Presença\\**)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(next *)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout *)",
+      "Bash(git branch*)",
+      "Bash(git log*)",
+      "Bash(git push origin migration/*)",
+      "Bash(git push -u origin migration/*)"
+    ],
+    "deny": [
+      "Write(C:\\Users\\luife\\Desktop\\Pessoal\\Arquivos\\Freelas\\Kalil\\backend\\**)",
+      "Edit(C:\\Users\\luife\\Desktop\\Pessoal\\Arquivos\\Freelas\\Kalil\\backend\\**)",
+      "Bash(rm -rf *)",
+      "Bash(git push --force*)",
+      "Bash(git push origin master --force*)",
+      "Bash(git push origin main --force*)",
+      "Bash(git reset --hard*)"
+    ],
+    "ask": [
+      "Bash(git push origin master*)",
+      "Bash(git push origin main*)",
+      "Bash(git push *master*)",
+      "Bash(git push *main*)",
+      "Bash(git merge*)"
+    ]
+  }
+}

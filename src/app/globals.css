@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ink: #14233b;
+  --color-ink-soft: #3b4a63;
+  --color-court: #0e8a86;
+  --color-court-deep: #0b6b68;
+  --color-flare: #f0562d;
+  --color-chalk: #fbfaf6;
+  --color-paper: #ffffff;
+  --color-mist: #eceee9;
+  --color-line: #d8dcd5;
+
+  --font-display: var(--font-archivo);
+  --font-sans: var(--font-instrument);
+}
+
+:root {
+  --background: var(--color-chalk);
+  --foreground: var(--color-ink);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Numerais estilo placar: Archivo tabular, apertado. */
+.tabular {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Motivo de linha central de quadra (giz). */
+.court-line {
+  background-image: linear-gradient(
+    to right,
+    transparent 0,
+    transparent calc(50% - 0.5px),
+    var(--color-line) calc(50% - 0.5px),
+    var(--color-line) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-court);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
