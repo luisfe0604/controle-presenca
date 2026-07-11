@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { DashboardResumo } from "@/lib/types";
 import { api } from "@/lib/api";
 import { formatBRL, currentMonth } from "@/lib/format";
+import { calcularLiquidos, CUSTO_FIXO_LABEL, CUSTO_FIXO_MENSAL } from "@/lib/config";
 
 export default function DashboardPage() {
   const [mes, setMes] = useState(currentMonth());
@@ -30,23 +31,42 @@ export default function DashboardPage() {
     carregar();
   }, [carregar]);
 
-  const financeiro = resumo
-    ? [
-        { label: "Receita prevista", value: formatBRL(resumo.receita_prevista) },
-        { label: "Receita recebida", value: formatBRL(resumo.receita_recebida) },
-        {
-          label: "A receber",
-          value: formatBRL(resumo.valor_a_receber),
-          alert: resumo.valor_a_receber > 0,
-        },
-        { label: "Receita líquida", value: formatBRL(resumo.receita_liquida) },
-        { label: "Custo de quadra", value: formatBRL(resumo.custo_quadra) },
-        {
-          label: "Custo de quadra estimado",
-          value: formatBRL(resumo.custo_quadra_estimado),
-        },
-      ]
-    : [];
+  const liquidos = resumo ? calcularLiquidos(resumo) : null;
+
+  const financeiro =
+    resumo && liquidos
+      ? [
+          { label: "Receita prevista", value: formatBRL(resumo.receita_prevista) },
+          { label: "Receita recebida", value: formatBRL(resumo.receita_recebida) },
+          {
+            label: "A receber",
+            value: formatBRL(resumo.valor_a_receber),
+            alert: resumo.valor_a_receber > 0,
+          },
+          {
+            label: "Receita líquida",
+            value: formatBRL(liquidos.receitaLiquida),
+          },
+          {
+            label: "Receita líquida prevista",
+            value: formatBRL(liquidos.receitaLiquidaPrevista),
+          },
+          {
+            label: "Líquido a receber",
+            value: formatBRL(liquidos.liquidoAReceber),
+            alert: liquidos.liquidoAReceber > 0,
+          },
+          { label: "Custo de quadra", value: formatBRL(resumo.custo_quadra) },
+          {
+            label: "Custo de quadra estimado",
+            value: formatBRL(resumo.custo_quadra_estimado),
+          },
+          {
+            label: `Custo fixo (${CUSTO_FIXO_LABEL})`,
+            value: formatBRL(CUSTO_FIXO_MENSAL),
+          },
+        ]
+      : [];
 
   return (
     <div className="space-y-8">

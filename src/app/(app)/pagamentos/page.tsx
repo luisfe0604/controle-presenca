@@ -5,6 +5,7 @@ import type { PagamentoLinha } from "@/lib/types";
 import { api } from "@/lib/api";
 import { formatBRL, currentMonth } from "@/lib/format";
 import { exportCsv } from "@/lib/csv";
+import { calcularLiquidos, CUSTO_FIXO_LABEL, CUSTO_FIXO_MENSAL } from "@/lib/config";
 
 export default function PagamentosPage() {
   const [mes, setMes] = useState(currentMonth());
@@ -63,6 +64,44 @@ export default function PagamentosPage() {
     .filter((l) => l.pago)
     .reduce((acc, l) => acc + l.valor_total, 0);
   const totalPrevisto = linhas.reduce((acc, l) => acc + l.valor_total, 0);
+  const custoQuadra = linhas
+    .filter((l) => l.pago)
+    .reduce((acc, l) => acc + l.valor_quadra, 0);
+  const custoQuadraEstimado = linhas.reduce((acc, l) => acc + l.valor_quadra, 0);
+  const receitaLiquidaBruta = linhas
+    .filter((l) => l.pago)
+    .reduce((acc, l) => acc + l.valor_liquido, 0);
+
+  const liquidos = calcularLiquidos({
+    receita_prevista: totalPrevisto,
+    receita_recebida: totalRecebido,
+    valor_a_receber: totalPrevisto - totalRecebido,
+    custo_quadra: custoQuadra,
+    custo_quadra_estimado: custoQuadraEstimado,
+    receita_liquida: receitaLiquidaBruta,
+  });
+
+  const resumoCards = [
+    { label: "Recebido", value: formatBRL(totalRecebido), tone: "court" as const },
+    { label: "Previsto", value: formatBRL(totalPrevisto), tone: "ink" as const },
+    { label: "Líquido", value: formatBRL(liquidos.receitaLiquida), tone: "ink" as const },
+    {
+      label: "Líquido previsto",
+      value: formatBRL(liquidos.receitaLiquidaPrevista),
+      tone: "ink" as const,
+    },
+    {
+      label: "A receber líquido",
+      value: formatBRL(liquidos.liquidoAReceber),
+      tone: "ink" as const,
+    },
+    { label: "Custo de quadra", value: formatBRL(custoQuadra), tone: "ink" as const },
+    {
+      label: `Custo fixo (${CUSTO_FIXO_LABEL})`,
+      value: formatBRL(CUSTO_FIXO_MENSAL),
+      tone: "ink" as const,
+    },
+  ];
 
   function baixarCsv() {
     exportCsv(
@@ -104,23 +143,21 @@ export default function PagamentosPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-line bg-paper">
-        <div className="p-5">
-          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft">
-            Recebido
-          </p>
-          <p className="tabular mt-1 text-2xl font-extrabold text-court-deep">
-            {formatBRL(totalRecebido)}
-          </p>
-        </div>
-        <div className="border-l border-line p-5">
-          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft">
-            Previsto
-          </p>
-          <p className="tabular mt-1 text-2xl font-extrabold text-ink">
-            {formatBRL(totalPrevisto)}
-          </p>
-        </div>
+      <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3 lg:grid-cols-4">
+        {resumoCards.map((c) => (
+          <div key={c.label} className="bg-paper p-4">
+            <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-soft">
+              {c.label}
+            </p>
+            <p
+              className={`tabular mt-1 text-xl font-extrabold ${
+                c.tone === "court" ? "text-court-deep" : "text-ink"
+              }`}
+            >
+              {c.value}
+            </p>
+          </div>
+        ))}
       </div>
 
       <label className="flex w-fit items-center gap-2 text-sm text-ink-soft">
