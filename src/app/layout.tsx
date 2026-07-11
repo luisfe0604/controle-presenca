@@ -15,8 +15,8 @@ const instrument = Instrument_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Quadra — Gestão de vôlei",
-  description: "Presenças, alunos e pagamentos da escola de vôlei",
+  title: "Presença — Gestão de vôlei",
+  description: "Presenças, alunos e pagamentos das aulas de vôlei",
 };
 
 export default function RootLayout({

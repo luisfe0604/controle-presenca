@@ -5,11 +5,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 const links = [
-  { href: "/dashboard", label: "Placar", hint: "Visão geral" },
+  { href: "/dashboard", label: "Dashboard", hint: "Visão geral" },
   { href: "/presencas", label: "Presenças", hint: "Chamada do dia" },
   { href: "/alunos", label: "Alunos", hint: "Cadastro e turmas" },
   { href: "/pagamentos", label: "Pagamentos", hint: "Mensalidades" },
 ];
+
+const PLACAR_URL = "https://score-pink.vercel.app/";
 
 function Logomark() {
   return (
@@ -17,6 +19,24 @@ function Logomark() {
       <span className="absolute inset-y-1.5 left-1/2 w-px -translate-x-1/2 bg-chalk/70" />
       <span className="relative h-2 w-2 rounded-full bg-flare" />
     </span>
+  );
+}
+
+function ExternalIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-3.5 w-3.5"
+      aria-hidden="true"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M8 7h9v9" />
+    </svg>
   );
 }
 
@@ -37,7 +57,9 @@ export function Sidebar() {
         <div className="flex items-center gap-3">
           <Logomark />
           <div className="leading-tight">
-            <p className="font-display text-lg font-extrabold tracking-tight">QUADRA</p>
+            <p className="font-display text-lg font-extrabold tracking-tight">
+              Presença
+            </p>
             <p className="text-[11px] uppercase tracking-[0.18em] text-chalk/50">
               Gestão · Vôlei
             </p>
@@ -66,6 +88,22 @@ export function Sidebar() {
               </Link>
             );
           })}
+
+          {/* Ferramenta externa — abre o placar ao vivo em outra aba */}
+          <a
+            href={PLACAR_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 flex items-center justify-between rounded-lg border border-dashed border-white/15 px-3 py-2.5 text-chalk/70 transition-colors hover:border-court hover:text-chalk"
+          >
+            <span className="flex flex-col">
+              <span className="flex items-center gap-1.5 text-sm font-semibold">
+                Placar
+                <ExternalIcon />
+              </span>
+              <span className="text-[11px] text-chalk/40">Marcador ao vivo</span>
+            </span>
+          </a>
         </nav>
       </div>
 

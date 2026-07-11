@@ -42,7 +42,7 @@ export default function LoginPage() {
             <span className="absolute inset-y-2 left-1/2 w-px -translate-x-1/2 bg-chalk/70" />
             <span className="relative h-2 w-2 rounded-full bg-flare" />
           </span>
-          <p className="font-display text-xl font-extrabold tracking-tight">QUADRA</p>
+          <p className="font-display text-xl font-extrabold tracking-tight">Presença</p>
         </div>
 
         <div>
@@ -54,7 +54,7 @@ export default function LoginPage() {
             <span className="text-court">mensalidades.</span>
           </p>
           <p className="mt-6 max-w-sm text-chalk/60">
-            O placar da sua escola de vôlei em um só lugar. Marque presença,
+            A gestão das suas aulas de vôlei em um só lugar. Marque presença,
             acompanhe pagamentos e veja a saúde do mês num relance.
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function LoginPage() {
             <h1 className="font-display text-2xl font-extrabold tracking-tight text-ink">
               Entrar
             </h1>
-            <p className="mt-1 text-sm text-ink-soft">Acesse o painel da escola.</p>
+            <p className="mt-1 text-sm text-ink-soft">Acesse o painel das aulas.</p>
           </div>
 
           <div className="space-y-1.5">
