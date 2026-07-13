@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Logomark } from "@/components/Logomark";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -38,10 +39,7 @@ export default function LoginPage() {
       {/* Painel de marca — a quadra */}
       <div className="relative hidden flex-1 flex-col justify-between bg-ink p-12 text-chalk lg:flex">
         <div className="flex items-center gap-3">
-          <span className="relative flex h-10 w-10 items-center justify-center rounded-md bg-court">
-            <span className="absolute inset-y-2 left-1/2 w-px -translate-x-1/2 bg-chalk/70" />
-            <span className="relative h-2 w-2 rounded-full bg-flare" />
-          </span>
+          <Logomark size={40} />
           <p className="font-display text-xl font-extrabold tracking-tight">Presença</p>
         </div>
 

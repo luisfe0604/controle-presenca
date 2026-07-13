@@ -46,6 +46,22 @@ body {
   );
 }
 
+/* Animação de "virada" do placar ao alterar o número. */
+@keyframes placar-flip {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+.placar-flip {
+  animation: placar-flip 0.4s ease;
+}
+
 *:focus-visible {
   outline: 2px solid var(--color-court);
   outline-offset: 2px;
